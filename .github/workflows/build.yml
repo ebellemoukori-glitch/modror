@@ -1,0 +1,28 @@
+name: Build WarzoneStyleMod
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1
+
+    - name: Build DLL
+      run: |
+        mkdir build
+        msbuild /t:Build /p:Configuration=Release /p:OutputPath=build
+
+    - name: Upload DLL
+      uses: actions/upload-artifact@v3
+      with:
+        name: WarzoneStyleMod-DLL
+        path: build/WarzoneStyleMod.dll
